@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block mainbody %}
+    <p>继承了base.html文件</p>
+    <input id="name" type="text" value="name">
+    <input type="button" value="增加" onclick="insert()">
+    <input type="button" value="查找" onclick="find()">
+    <table>
+        {% for r in response %}
+            <tr>
+                <td>{{ r.id }}</td>
+                <td>{{ r.name }}</td>
+                <td><input type="button" value="修改" onclick="update({{ r.id }})"></td>
+                <td><input type="button" value="删除" onclick="del({{ r.id }})"></td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <script>
+        var xmlhttp;
+        if(window.XMLHttpRequest) {
+            //  IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+            xmlhttp = new XMLHttpRequest();
+        } else {
+            // IE6, IE5 浏览器执行代码
+            xmlhttp = new ActiveXObject("")
+        }
+        xmlhttp.onreadystatechange=function() {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+                window.location.reload()
+            }
+        };
+
+        function insert() {
+            let name = document.getElementById("name").value;
+            xmlhttp.open("GET", `insert?name=${name}`, true);
+            xmlhttp.send();
+        }
+
+        function update(id) {
+            let name = document.getElementById("name").value;
+            xmlhttp.open("GET", `update?id=${id}&name=${name}`, true);
+            xmlhttp.send();
+        }
+
+        function del(id) {
+            xmlhttp.open("GET", "delete?id="+id, true);
+            xmlhttp.send()
+        }
+
+        function find() {
+            let name = document.getElementById("name").value;
+            window.location.href=`find?name=${name}`
+        }
+
+    </script>
+{% endblock %}
